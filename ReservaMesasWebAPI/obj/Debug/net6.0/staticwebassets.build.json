@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "CyqhVqBcywc8kpHzTkLICDoXPfKknQ7pKlL8B9fUUa0=",
+  "Source": "ReservaMesasWebAPI",
+  "BasePath": "_content/ReservaMesasWebAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
