@@ -22,14 +22,26 @@ namespace ReservaMesasWebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("usuarios/{login}")]
+        [Route("usuarios/login/{login}")]
 
-        public async Task<IActionResult> getByIdAsync([FromServices] Contexto contexto, [FromRoute] string login)
+        public async Task<IActionResult> getByLoginAsync([FromServices] Contexto contexto, [FromRoute] string login)
         {
             var usuarios = await contexto
                 .Usuarios
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.login == login);
+            return usuarios == null ? NotFound() : Ok(usuarios);
+        }
+
+        [HttpGet]
+        [Route("usuarios/{id}")]
+
+        public async Task<IActionResult> getByIdAsync([FromServices] Contexto contexto, [FromRoute] int id)
+        {
+            var usuarios = await contexto
+                .Usuarios
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.id == id);
             return usuarios == null ? NotFound() : Ok(usuarios);
         }
 
@@ -49,7 +61,7 @@ namespace ReservaMesasWebAPI.Controllers
             {
                 await contexto.Usuarios.AddAsync(usuario);
                 await contexto.SaveChangesAsync();
-                return Created($"api/usuarios/{usuario.login}", usuario);
+                return Created($"api/usuarios/{usuario.id}", usuario);
             }
             catch (Exception ex)
             {
@@ -59,12 +71,12 @@ namespace ReservaMesasWebAPI.Controllers
 
 
         [HttpPut]
-        [Route("usuarios/{login}")]
+        [Route("usuarios/{id}")]
 
         public async Task<IActionResult> PutAsync(
             [FromServices] Contexto contexto,
             [FromBody] Usuario usuario,
-            [FromRoute] string login)
+            [FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
@@ -72,7 +84,7 @@ namespace ReservaMesasWebAPI.Controllers
             }
 
             var c = await contexto.Usuarios
-                .FirstOrDefaultAsync(x => x.login == login);
+                .FirstOrDefaultAsync(x => x.id == id);
 
             if (c == null)
                 return NotFound();
@@ -94,15 +106,15 @@ namespace ReservaMesasWebAPI.Controllers
 
 
         [HttpDelete]
-        [Route("usuarios/{login}")]
+        [Route("usuarios/{id}")]
 
         public async Task<IActionResult> DeleteAsync(
             [FromServices] Contexto contexto,
-            [FromRoute] string login
+            [FromRoute] int id
             )
         {
             var p = await contexto.Usuarios
-                .FirstOrDefaultAsync(x => x.login == login);
+                .FirstOrDefaultAsync(x => x.id == id);
 
             if (p == null) { return BadRequest(); }
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReservaMesasWebAPI.Data;
 
@@ -11,9 +12,10 @@ using ReservaMesasWebAPI.Data;
 namespace ReservaMesasWebAPI.Migrations
 {
     [DbContext(typeof(Contexto))]
-    partial class ContextoModelSnapshot : ModelSnapshot
+    [Migration("20220112015116_usuario_id")]
+    partial class usuario_id
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,14 +61,13 @@ namespace ReservaMesasWebAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("usuarioId")
+                    b.Property<int>("usuarioId")
                         .HasColumnType("int");
 
                     b.HasKey("id");
 
                     b.HasIndex("usuarioId")
-                        .IsUnique()
-                        .HasFilter("[usuarioId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Clientes");
                 });
@@ -159,7 +160,9 @@ namespace ReservaMesasWebAPI.Migrations
                 {
                     b.HasOne("ReservaMesasWebAPI.Models.Usuario", "usuario")
                         .WithOne("cliente")
-                        .HasForeignKey("ReservaMesasWebAPI.Models.Cliente", "usuarioId");
+                        .HasForeignKey("ReservaMesasWebAPI.Models.Cliente", "usuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("usuario");
                 });

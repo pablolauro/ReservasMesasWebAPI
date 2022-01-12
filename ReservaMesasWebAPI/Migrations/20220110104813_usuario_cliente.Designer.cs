@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReservaMesasWebAPI.Data;
 
@@ -11,9 +12,10 @@ using ReservaMesasWebAPI.Data;
 namespace ReservaMesasWebAPI.Migrations
 {
     [DbContext(typeof(Contexto))]
-    partial class ContextoModelSnapshot : ModelSnapshot
+    [Migration("20220110104813_usuario_cliente")]
+    partial class usuario_cliente
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,6 +53,10 @@ namespace ReservaMesasWebAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("loginUsuario")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("nome")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -59,14 +65,10 @@ namespace ReservaMesasWebAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("usuarioId")
-                        .HasColumnType("int");
-
                     b.HasKey("id");
 
-                    b.HasIndex("usuarioId")
-                        .IsUnique()
-                        .HasFilter("[usuarioId] IS NOT NULL");
+                    b.HasIndex("loginUsuario")
+                        .IsUnique();
 
                     b.ToTable("Clientes");
                 });
@@ -132,15 +134,8 @@ namespace ReservaMesasWebAPI.Migrations
 
             modelBuilder.Entity("ReservaMesasWebAPI.Models.Usuario", b =>
                 {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
                     b.Property<string>("login")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("password")
                         .IsRequired()
@@ -150,7 +145,7 @@ namespace ReservaMesasWebAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.HasKey("login");
 
                     b.ToTable("Usuarios");
                 });
@@ -159,7 +154,9 @@ namespace ReservaMesasWebAPI.Migrations
                 {
                     b.HasOne("ReservaMesasWebAPI.Models.Usuario", "usuario")
                         .WithOne("cliente")
-                        .HasForeignKey("ReservaMesasWebAPI.Models.Cliente", "usuarioId");
+                        .HasForeignKey("ReservaMesasWebAPI.Models.Cliente", "loginUsuario")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("usuario");
                 });

@@ -24,6 +24,11 @@ namespace ReservaMesasWebAPI.Data
                 .WithMany(a => a.mesas)
                 .HasForeignKey(m => m.idAreaMesa);
 
+            modelBuilder.Entity<Usuario>()
+                            .HasOne(u => u.cliente)
+                            .WithOne(c => c.usuario)
+                            .HasForeignKey<Cliente>(c => c.usuarioId);
+
             modelBuilder.Entity<Reserva>()
                 .HasOne(r => r.mesa)
                 .WithMany(m => m.reservas)

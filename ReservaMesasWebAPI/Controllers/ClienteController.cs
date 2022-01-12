@@ -15,6 +15,7 @@ namespace ReservaMesasWebAPI.Controllers
         {
             var clientes = await contexto
                 .Clientes
+                .Include(x => x.usuario)
                 .AsNoTracking()
                 .ToListAsync();
             
@@ -28,6 +29,7 @@ namespace ReservaMesasWebAPI.Controllers
         {
             var clientes = await contexto
                 .Clientes
+                .Include(x => x.usuario)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.id == id);
             return clientes == null ? NotFound() : Ok(clientes);
