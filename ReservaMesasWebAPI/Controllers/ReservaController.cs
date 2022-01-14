@@ -43,16 +43,36 @@ namespace ReservaMesasWebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("reservas/data/{data}")]
+        [Route("reservas/data")]
 
-        public async Task<IActionResult> getByDataAsync([FromServices] Contexto contexto, [FromRoute] DateTime data)
+        public async Task<IActionResult> getByDataHojeAsync([FromServices] Contexto contexto)
+        {
+
+            var reservas = await contexto
+                .Reservas
+                .Include(x => x.mesa)
+                .Include(x => x.mesa.area)
+                .Include(x => x.cliente)
+                .Where(x => x.data >= DateTime.Now.Date)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return reservas == null ? NotFound() : Ok(reservas);
+        }
+
+
+        [HttpGet]
+        [Route("reservas/cliente/busca/{nome}")]
+
+        public async Task<IActionResult> getByNomeClienteAsync([FromServices] Contexto contexto, [FromRoute] string nome)
         {
 
             var reservas = await contexto
                 .Reservas
                 .Include(x => x.mesa)
                 .Include(x => x.cliente)
-                .Where(x => x.data == data)
+                .Where(x => x.data >= DateTime.Now.Date)
+                .Where(x => x.cliente.nome.Contains(nome))
                 .AsNoTracking()
                 .ToListAsync();
 

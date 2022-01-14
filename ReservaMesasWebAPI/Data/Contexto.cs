@@ -10,6 +10,7 @@ namespace ReservaMesasWebAPI.Data
         public DbSet<Mesa> Mesas { get; set; }
         public DbSet<Reserva> Reservas { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<PreReserva> PreReservas { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder opt)

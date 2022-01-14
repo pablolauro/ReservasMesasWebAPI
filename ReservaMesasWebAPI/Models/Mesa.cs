@@ -9,6 +9,7 @@
         public int idAreaMesa { get; set; }
         public AreaMesa? area { get; set; }
         public List<Reserva>? reservas { get; set; }
+        public string? exibirMesa { get; set; }
 
     }
 }

@@ -21,7 +21,26 @@ namespace ReservaMesasWebAPI.Controllers
 
             return mesas == null ? NotFound() : Ok(mesas);
         }
-        
+
+        [HttpGet]
+        [Route("mesas/funcionando")]
+        public async Task<IActionResult> getAllMesasFuncionandoAsync([FromServices] Contexto contexto)
+        {
+            var mesas = await contexto
+                .Mesas
+                .Include(x => x.area)
+                .Where(x => x.funcionando == true)
+                .AsNoTracking()
+                .ToListAsync();
+
+            foreach (var item in mesas)
+            {
+                item.exibirMesa = "Nº " + item.numMesa + " Area " + item.area.nome;
+            }
+
+            return mesas == null ? NotFound() : Ok(mesas);
+        }
+
         [HttpGet]
         [Route("mesas/{id}")]
 
